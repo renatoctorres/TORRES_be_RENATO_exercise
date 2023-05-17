@@ -4,6 +4,8 @@ import com.ecore.roles.model.Role;
 import com.ecore.roles.service.MembershipsService;
 import com.ecore.roles.service.RolesService;
 import com.ecore.roles.web.dto.RoleDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,7 +33,9 @@ public class RolesRestController {
     private RolesService rolesService;
     @Autowired
     private MembershipsService membershipsService;
-
+    @Operation(summary = "Create a Role")
+    @ApiResponse(responseCode = "201", description = "Role created with success!")
+    @ApiResponse(responseCode = "400", description = "Role already existing!")
     @PostMapping(
             consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -42,6 +46,8 @@ public class RolesRestController {
                 .body(fromModel(rolesService.createRole(role.toModel())));
     }
 
+    @Operation(summary = "Returns a List of Roles")
+    @ApiResponse(responseCode = "200", description = "List of Roles successfully found!")
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<RoleDto>> getRoles() {
@@ -57,6 +63,9 @@ public class RolesRestController {
                 .body(roleDtoList);
     }
 
+    @Operation(summary = "Find an Role by ID")
+    @ApiResponse(responseCode = "200", description = "Role found successfully by ID!")
+    @ApiResponse(responseCode = "404", description = "Role not found!")
     @GetMapping(
             path = "/{roleId}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -67,6 +76,9 @@ public class RolesRestController {
                 .body(fromModel(rolesService.getRole(roleId)));
     }
 
+    @Operation(summary = "Find an Role by Params")
+    @ApiResponse(responseCode = "200", description = "Role found successfully by params!")
+    @ApiResponse(responseCode = "400", description = "Bad Request!")
     @GetMapping(
             path = "/search",
             produces = {MediaType.APPLICATION_JSON_VALUE})

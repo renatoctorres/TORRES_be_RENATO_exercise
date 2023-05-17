@@ -2,8 +2,8 @@ package com.ecore.roles.web.rest;
 
 import com.ecore.roles.service.UsersService;
 import com.ecore.roles.web.dto.UserDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +24,8 @@ import static com.ecore.roles.web.dto.UserDto.fromModel;
 public class UsersRestController {
     @Autowired
     private UsersService usersService;
-
+    @Operation(summary = "Returns a List of Users")
+    @ApiResponse(responseCode = "200", description = "List of Users successfully found!")
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UserDto>> getUsers() {
@@ -34,6 +35,8 @@ public class UsersRestController {
                         .map(UserDto::fromModel)
                         .collect(Collectors.toList()));
     }
+    @Operation(summary = "Find an User by ID")
+    @ApiResponse(responseCode = "200", description = "User found successfully!")
     @GetMapping(
             path = "/{userId}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -43,4 +46,5 @@ public class UsersRestController {
                 .status(HttpStatus.OK)
                 .body(fromModel(usersService.getUser(userId)));
     }
+
 }

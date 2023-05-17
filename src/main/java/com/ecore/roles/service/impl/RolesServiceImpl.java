@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ *  Roles Service Implementation
+ */
 @Log4j2
 @Service
 public class RolesServiceImpl implements RolesService {
@@ -26,6 +29,11 @@ public class RolesServiceImpl implements RolesService {
     @Autowired
     private MembershipsService membershipsService;
 
+    /**
+     *
+     * @param r Role Data Model
+     * @return Role Entity created/saved in DB
+     */
     public Role createRole(@NonNull Role r) {
         if (roleRepository.findByName(r.getName()).isPresent()) {
             throw new ResourceExistsException(Role.class);
@@ -33,11 +41,20 @@ public class RolesServiceImpl implements RolesService {
         return roleRepository.save(r);
     }
 
+    /**
+     *
+     * @param rid Role ID
+     * @return Role Entity from DB
+     */
     public Role getRole(@NonNull UUID rid) {
         return roleRepository.findById(rid)
                 .orElseThrow(() -> new ResourceNotFoundException(Role.class, rid));
     }
 
+    /**
+     *
+     * @return List of All Roles
+     */
     public List<Role> getRoles() {
         return roleRepository.findAll();
     }

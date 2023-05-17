@@ -2,6 +2,8 @@ package com.ecore.roles.web.rest;
 
 import com.ecore.roles.service.TeamsService;
 import com.ecore.roles.web.dto.TeamDto;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -22,6 +24,8 @@ import static com.ecore.roles.web.dto.TeamDto.fromModel;
 public class TeamsRestController {
     @Autowired
     private TeamsService teamsService;
+    @Operation(summary = "Returns a List of Teams")
+    @ApiResponse(responseCode = "200", description = "List of Teams successfully found!")
     @GetMapping(
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<TeamDto>> getTeams() {
@@ -32,6 +36,9 @@ public class TeamsRestController {
                         .collect(Collectors.toList()));
     }
 
+    @Operation(summary = "Find an Team by ID")
+    @ApiResponse(responseCode = "200", description = "Team found successfully!")
+    @ApiResponse(responseCode = "404", description = "Team not found!")
     @GetMapping(
             path = "/{teamId}",
             produces = {MediaType.APPLICATION_JSON_VALUE})
