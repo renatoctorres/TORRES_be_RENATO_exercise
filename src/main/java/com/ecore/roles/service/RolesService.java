@@ -6,11 +6,8 @@ import java.util.List;
 import java.util.UUID;
 
 public interface RolesService {
-
-    Role CreateRole(Role role);
-
-    Role GetRole(UUID id);
-
-    List<Role> GetRoles();
+    Role createRole(Role role);
+    Role getRole(UUID id);
+    List<Role> getRoles();
 
 }

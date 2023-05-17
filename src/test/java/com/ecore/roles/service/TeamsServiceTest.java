@@ -18,12 +18,10 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class TeamsServiceTest {
-
     @InjectMocks
     private TeamsServiceImpl TeamsService;
     @Mock
     private TeamsClient TeamsClient;
-
     @Test
     void shouldGetTeamWhenTeamIdExists() {
         Team ordinaryCoralLynxTeam = ORDINARY_CORAL_LYNX_TEAM();
