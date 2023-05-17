@@ -11,13 +11,8 @@ import java.util.UUID;
 
 @Service
 public class UsersServiceImpl implements UsersService {
-
-    private final UsersClient usersClient;
-
     @Autowired
-    public UsersServiceImpl(UsersClient usersClient) {
-        this.usersClient = usersClient;
-    }
+    private UsersClient usersClient;
 
     public User getUser(UUID id) {
         return usersClient.getUser(id).getBody();
