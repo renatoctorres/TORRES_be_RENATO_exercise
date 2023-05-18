@@ -14,8 +14,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
-import static com.ecore.roles.utils.TestData.DEFAULT_MEMBERSHIP;
-import static com.ecore.roles.utils.TestData.DEVELOPER_ROLE;
+import static com.ecore.roles.utils.TestData.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -39,7 +38,7 @@ class MembershipsServiceTest {
     private TeamsService teamsService;
 
     @Test
-    public void shouldCreateMembership() {
+    void shouldCreateMembership() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
         when(roleRepository.findById(expectedMembership.getRole().getId()))
                 .thenReturn(Optional.ofNullable(DEVELOPER_ROLE()));
@@ -50,6 +49,9 @@ class MembershipsServiceTest {
                 .save(expectedMembership))
                         .thenReturn(expectedMembership);
 
+        when(teamsService.getTeam(expectedMembership.getTeamId()))
+                .thenReturn(ORDINARY_CORAL_LYNX_TEAM());
+
         Membership actualMembership = membershipsService.assignRoleToMembership(expectedMembership);
 
         assertNotNull(actualMembership);
@@ -58,13 +60,13 @@ class MembershipsServiceTest {
     }
 
     @Test
-    public void shouldFailToCreateMembershipWhenMembershipsIsNull() {
+    void shouldFailToCreateMembershipWhenMembershipsIsNull() {
         assertThrows(NullPointerException.class,
                 () -> membershipsService.assignRoleToMembership(null));
     }
 
     @Test
-    public void shouldFailToCreateMembershipWhenItExists() {
+    void shouldFailToCreateMembershipWhenItExists() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
         when(membershipRepository.findByUserIdAndTeamId(expectedMembership.getUserId(),
                 expectedMembership.getTeamId()))
@@ -80,7 +82,7 @@ class MembershipsServiceTest {
     }
 
     @Test
-    public void shouldFailToCreateMembershipWhenItHasInvalidRole() {
+    void shouldFailToCreateMembershipWhenItHasInvalidRole() {
         Membership expectedMembership = DEFAULT_MEMBERSHIP();
         expectedMembership.setRole(null);
 
@@ -95,7 +97,7 @@ class MembershipsServiceTest {
     }
 
     @Test
-    public void shouldFailToGetMembershipsWhenRoleIdIsNull() {
+    void shouldFailToGetMembershipsWhenRoleIdIsNull() {
         assertThrows(NullPointerException.class,
                 () -> membershipsService.getMemberships(null));
     }

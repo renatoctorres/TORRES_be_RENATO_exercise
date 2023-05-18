@@ -15,47 +15,47 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ *  Roles Service Implementation
+ */
 @Log4j2
 @Service
 public class RolesServiceImpl implements RolesService {
-
     public static final String DEFAULT_ROLE = "Developer";
-
-    private final RoleRepository roleRepository;
-    private final MembershipRepository membershipRepository;
-    private final MembershipsService membershipsService;
-
     @Autowired
-    public RolesServiceImpl(
-            RoleRepository roleRepository,
-            MembershipRepository membershipRepository,
-            MembershipsService membershipsService) {
-        this.roleRepository = roleRepository;
-        this.membershipRepository = membershipRepository;
-        this.membershipsService = membershipsService;
-    }
+    private RoleRepository roleRepository;
+    @Autowired
+    private MembershipRepository membershipRepository;
+    @Autowired
+    private MembershipsService membershipsService;
 
-    @Override
-    public Role CreateRole(@NonNull Role r) {
+    /**
+     *
+     * @param r Role Data Model
+     * @return Role Entity created/saved in DB
+     */
+    public Role createRole(@NonNull Role r) {
         if (roleRepository.findByName(r.getName()).isPresent()) {
             throw new ResourceExistsException(Role.class);
         }
         return roleRepository.save(r);
     }
 
-    @Override
-    public Role GetRole(@NonNull UUID rid) {
+    /**
+     *
+     * @param rid Role ID
+     * @return Role Entity from DB
+     */
+    public Role getRole(@NonNull UUID rid) {
         return roleRepository.findById(rid)
                 .orElseThrow(() -> new ResourceNotFoundException(Role.class, rid));
     }
 
-    @Override
-    public List<Role> GetRoles() {
+    /**
+     *
+     * @return List of All Roles
+     */
+    public List<Role> getRoles() {
         return roleRepository.findAll();
-    }
-
-    private Role getDefaultRole() {
-        return roleRepository.findByName(DEFAULT_ROLE)
-                .orElseThrow(() -> new IllegalStateException("Default role is not configured"));
     }
 }
